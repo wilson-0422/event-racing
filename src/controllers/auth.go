@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"net/http"
-	"strconv"
 
 	"event-racing/src/config"
 	"event-racing/src/services"
@@ -91,7 +90,13 @@ func getUserFromSession(c *gin.Context) gin.H {
 	if userID == nil {
 		return gin.H{}
 	}
-	id, _ := strconv.ParseInt(userID.(string), 10, 64)
+	var id int64
+	switch v := userID.(type) {
+	case int64:
+		id = v
+	case float64:
+		id = int64(v)
+	}
 	user, err := services.GetUserByID(id)
 	if err != nil {
 		return gin.H{}
