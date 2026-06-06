@@ -1,0 +1,64 @@
+{{ define "scores/detail" }}
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>成绩详情 - 赛事赛程管理系统</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    {{ template "partials/header" . }}
+    <div class="layout">
+        <aside class="sidebar">
+            <nav class="sidebar-nav">
+                <a href="/" class="nav-item">首页</a>
+                <a href="/dashboard" class="nav-item">系统概览</a>
+                <a href="/athletes" class="nav-item">运动员管理</a>
+                <a href="/groups" class="nav-item">分组编排</a>
+                <a href="/schedules" class="nav-item">赛程排班</a>
+                <a href="/scores" class="nav-item active">成绩录入</a>
+                <a href="/awards" class="nav-item">获奖档案</a>
+                <a href="/venues" class="nav-item">场地管理</a>
+            </nav>
+        </aside>
+        <main class="main-content">
+            <div class="page-header">
+                <h1>成绩详情</h1>
+                <a href="/scores" class="btn btn-outline">← 返回列表</a>
+            </div>
+            <div class="card">
+                <div class="detail-grid">
+                    <div class="detail-item">
+                        <span class="detail-label">运动员</span>
+                        <span class="detail-value">{{ .Score.AthleteName }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">赛程ID</span>
+                        <span class="detail-value">{{ .Score.ScheduleID }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">成绩</span>
+                        <span class="detail-value">{{ .Score.Score }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">名次</span>
+                        <span class="detail-value">{{ .Score.Rank }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">备注</span>
+                        <span class="detail-value">{{ .Score.Remark }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">录入时间</span>
+                        <span class="detail-value">{{ .Score.CreatedAt }}</span>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    {{ template "partials/footer" . }}
+    <script src="/static/js/main.js"></script>
+</body>
+</html>
+{{ end }}

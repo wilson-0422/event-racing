@@ -1,0 +1,86 @@
+{{ define "groups/detail" }}
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>分组详情 - 赛事赛程管理系统</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    {{ template "partials/header" . }}
+    <div class="layout">
+        <aside class="sidebar">
+            <nav class="sidebar-nav">
+                <a href="/" class="nav-item">首页</a>
+                <a href="/dashboard" class="nav-item">系统概览</a>
+                <a href="/athletes" class="nav-item">运动员管理</a>
+                <a href="/groups" class="nav-item active">分组编排</a>
+                <a href="/schedules" class="nav-item">赛程排班</a>
+                <a href="/scores" class="nav-item">成绩录入</a>
+                <a href="/awards" class="nav-item">获奖档案</a>
+                <a href="/venues" class="nav-item">场地管理</a>
+            </nav>
+        </aside>
+        <main class="main-content">
+            <div class="page-header">
+                <h1>分组详情</h1>
+                <a href="/groups" class="btn btn-outline">← 返回列表</a>
+            </div>
+            <div class="card">
+                <div class="detail-grid">
+                    <div class="detail-item">
+                        <span class="detail-label">分组名称</span>
+                        <span class="detail-value">{{ .Group.Name }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">比赛项目</span>
+                        <span class="detail-value">{{ .Group.Event }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">状态</span>
+                        <span class="detail-value">
+                            <span class="status status-{{ .Group.Status }}">
+                                {{ if eq .Group.Status "pending" }}待编排{{ end }}
+                                {{ if eq .Group.Status "arranged" }}已编排{{ end }}
+                                {{ if eq .Group.Status "completed" }}已完成{{ end }}
+                            </span>
+                        </span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">创建时间</span>
+                        <span class="detail-value">{{ .Group.CreatedAt }}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="section">
+                <h2>分组运动员 ({{ len .Group.Athletes }}人)</h2>
+                <div class="card">
+                    <table class="table">
+                        <thead>
+                            <tr><th>编号</th><th>姓名</th><th>性别</th><th>年龄</th><th>代表队</th></tr>
+                        </thead>
+                        <tbody>
+                            {{ range .Group.Athletes }}
+                            <tr>
+                                <td>{{ .ID }}</td>
+                                <td>{{ .Name }}</td>
+                                <td>{{ .Gender }}</td>
+                                <td>{{ .Age }}</td>
+                                <td>{{ .Team }}</td>
+                            </tr>
+                            {{ end }}
+                            {{ if not .Group.Athletes }}
+                            <tr><td colspan="5" class="empty">暂未编排运动员</td></tr>
+                            {{ end }}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+    {{ template "partials/footer" . }}
+    <script src="/static/js/main.js"></script>
+</body>
+</html>
+{{ end }}

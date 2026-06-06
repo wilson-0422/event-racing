@@ -1,0 +1,33 @@
+{{ define "base" }}
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ .Title }} - 赛事赛程管理系统</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    {{ template "partials/header" . }}
+    <div class="layout">
+        <aside class="sidebar">
+            <nav class="sidebar-nav">
+                <a href="/" class="nav-item">首页</a>
+                <a href="/dashboard" class="nav-item">系统概览</a>
+                <a href="/athletes" class="nav-item">运动员管理</a>
+                <a href="/groups" class="nav-item">分组编排</a>
+                <a href="/schedules" class="nav-item">赛程排班</a>
+                <a href="/scores" class="nav-item">成绩录入</a>
+                <a href="/awards" class="nav-item">获奖档案</a>
+                <a href="/venues" class="nav-item">场地管理</a>
+            </nav>
+        </aside>
+        <main class="main-content">
+            {{ block "content" . }}{{ end }}
+        </main>
+    </div>
+    {{ template "partials/footer" . }}
+    <script src="/static/js/main.js"></script>
+</body>
+</html>
+{{ end }}

@@ -1,0 +1,129 @@
+{{ define "dashboard/overview" }}
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>系统概览 - 赛事赛程管理系统</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    {{ template "partials/header" . }}
+    <div class="layout">
+        <aside class="sidebar">
+            <nav class="sidebar-nav">
+                <a href="/" class="nav-item">首页</a>
+                <a href="/dashboard" class="nav-item active">系统概览</a>
+                <a href="/athletes" class="nav-item">运动员管理</a>
+                <a href="/groups" class="nav-item">分组编排</a>
+                <a href="/schedules" class="nav-item">赛程排班</a>
+                <a href="/scores" class="nav-item">成绩录入</a>
+                <a href="/awards" class="nav-item">获奖档案</a>
+                <a href="/venues" class="nav-item">场地管理</a>
+            </nav>
+        </aside>
+        <main class="main-content">
+            <div class="page-header">
+                <h1>系统概览</h1>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">🏃</div>
+                    <div class="stat-value">{{ .AthleteCount }}</div>
+                    <div class="stat-label">运动员</div>
+                    <a href="/athletes" class="stat-link">查看详情 →</a>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">👥</div>
+                    <div class="stat-value">{{ .GroupCount }}</div>
+                    <div class="stat-label">分组</div>
+                    <a href="/groups" class="stat-link">查看详情 →</a>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">📅</div>
+                    <div class="stat-value">{{ .ScheduleCount }}</div>
+                    <div class="stat-label">赛程</div>
+                    <a href="/schedules" class="stat-link">查看详情 →</a>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🥇</div>
+                    <div class="stat-value">{{ .AwardCount }}</div>
+                    <div class="stat-label">获奖</div>
+                    <a href="/awards" class="stat-link">查看详情 →</a>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🏟️</div>
+                    <div class="stat-value">{{ .VenueCount }}</div>
+                    <div class="stat-label">场地</div>
+                    <a href="/venues" class="stat-link">查看详情 →</a>
+                </div>
+            </div>
+            <div class="dashboard-grid">
+                <div class="section">
+                    <h2>最近报名运动员</h2>
+                    <div class="card">
+                        <table class="table">
+                            <thead><tr><th>姓名</th><th>项目</th><th>代表队</th></tr></thead>
+                            <tbody>
+                                {{ range .RecentAthletes }}
+                                <tr>
+                                    <td><a href="/athletes/{{ .ID }}">{{ .Name }}</a></td>
+                                    <td>{{ .Event }}</td>
+                                    <td>{{ .Team }}</td>
+                                </tr>
+                                {{ end }}
+                                {{ if not .RecentAthletes }}
+                                <tr><td colspan="3" class="empty">暂无数据</td></tr>
+                                {{ end }}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="section">
+                    <h2>近期赛程</h2>
+                    <div class="card">
+                        <table class="table">
+                            <thead><tr><th>分组</th><th>场地</th><th>时间</th></tr></thead>
+                            <tbody>
+                                {{ range .UpcomingSchedules }}
+                                <tr>
+                                    <td>{{ .GroupName }}</td>
+                                    <td>{{ .VenueName }}</td>
+                                    <td>{{ .StartTime }}</td>
+                                </tr>
+                                {{ end }}
+                                {{ if not .UpcomingSchedules }}
+                                <tr><td colspan="3" class="empty">暂无数据</td></tr>
+                                {{ end }}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="section">
+                    <h2>最近获奖</h2>
+                    <div class="card">
+                        <table class="table">
+                            <thead><tr><th>运动员</th><th>项目</th><th>奖牌</th></tr></thead>
+                            <tbody>
+                                {{ range .RecentAwards }}
+                                <tr>
+                                    <td>{{ .AthleteName }}</td>
+                                    <td>{{ .Event }}</td>
+                                    <td><span class="medal medal-{{ .MedalType }}">{{ .MedalType }}</span></td>
+                                </tr>
+                                {{ end }}
+                                {{ if not .RecentAwards }}
+                                <tr><td colspan="3" class="empty">暂无数据</td></tr>
+                                {{ end }}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    {{ template "partials/footer" . }}
+    <script src="/static/js/main.js"></script>
+</body>
+</html>
+{{ end }}

@@ -1,0 +1,73 @@
+{{ define "groups/arrange" }}
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>编排分组 - 赛事赛程管理系统</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    {{ template "partials/header" . }}
+    <div class="layout">
+        <aside class="sidebar">
+            <nav class="sidebar-nav">
+                <a href="/" class="nav-item">首页</a>
+                <a href="/dashboard" class="nav-item">系统概览</a>
+                <a href="/athletes" class="nav-item">运动员管理</a>
+                <a href="/groups" class="nav-item active">分组编排</a>
+                <a href="/schedules" class="nav-item">赛程排班</a>
+                <a href="/scores" class="nav-item">成绩录入</a>
+                <a href="/awards" class="nav-item">获奖档案</a>
+                <a href="/venues" class="nav-item">场地管理</a>
+            </nav>
+        </aside>
+        <main class="main-content">
+            <div class="page-header">
+                <h1>编排分组 - {{ .Group.Name }}</h1>
+                <a href="/groups/{{ .Group.ID }}" class="btn btn-outline">← 返回详情</a>
+            </div>
+            {{ if .Error }}
+            <div class="alert alert-error">{{ .Error }}</div>
+            {{ end }}
+            <div class="card">
+                <div class="detail-grid">
+                    <div class="detail-item">
+                        <span class="detail-label">分组名称</span>
+                        <span class="detail-value">{{ .Group.Name }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">比赛项目</span>
+                        <span class="detail-value">{{ .Group.Event }}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <h3>选择参赛运动员（项目：{{ .Group.Event }}）</h3>
+                <form method="POST" action="/groups/{{ .Group.ID }}/arrange">
+                    <div class="checkbox-group">
+                        {{ range .AvailableAthletes }}
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="athlete_ids" value="{{ .ID }}"
+                                {{ range $.Group.Athletes }}{{ if eq $.Group.ID $.Group.ID }}{{ if eq .ID $.Group.ID }}checked{{ end }}{{ end }}{{ end }}
+                            >
+                            <span>{{ .Name }} - {{ .Team }} ({{ .Gender }}, {{ .Age }}岁)</span>
+                        </label>
+                        {{ end }}
+                        {{ if not .AvailableAthletes }}
+                        <p class="empty">该项目暂无报名运动员</p>
+                        {{ end }}
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">确认编排</button>
+                        <a href="/groups/{{ .Group.ID }}" class="btn btn-outline">取消</a>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
+    {{ template "partials/footer" . }}
+    <script src="/static/js/main.js"></script>
+</body>
+</html>
+{{ end }}

@@ -1,0 +1,17 @@
+{{ define "partials/header" }}
+<header class="header">
+    <div class="header-brand">
+        <span class="header-logo">🏆</span>
+        <span class="header-title">赛事赛程管理系统</span>
+    </div>
+    <div class="header-user">
+        {{ if .User }}
+        <span class="user-name">{{ .User.Username }}</span>
+        <span class="user-role">{{ if eq .User.Role "admin" }}管理员{{ else }}操作员{{ end }}</span>
+        <a href="/auth/logout" class="btn btn-sm btn-outline">退出</a>
+        {{ else }}
+        <a href="/auth/login" class="btn btn-sm btn-primary">登录</a>
+        {{ end }}
+    </div>
+</header>
+{{ end }}

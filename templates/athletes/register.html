@@ -1,0 +1,96 @@
+{{ define "athletes/register" }}
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>运动员报名 - 赛事赛程管理系统</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    {{ template "partials/header" . }}
+    <div class="layout">
+        <aside class="sidebar">
+            <nav class="sidebar-nav">
+                <a href="/" class="nav-item">首页</a>
+                <a href="/dashboard" class="nav-item">系统概览</a>
+                <a href="/athletes" class="nav-item active">运动员管理</a>
+                <a href="/groups" class="nav-item">分组编排</a>
+                <a href="/schedules" class="nav-item">赛程排班</a>
+                <a href="/scores" class="nav-item">成绩录入</a>
+                <a href="/awards" class="nav-item">获奖档案</a>
+                <a href="/venues" class="nav-item">场地管理</a>
+            </nav>
+        </aside>
+        <main class="main-content">
+            <div class="page-header">
+                <h1>{{ if .Athlete }}编辑运动员{{ else }}运动员报名{{ end }}</h1>
+                <a href="/athletes" class="btn btn-outline">← 返回列表</a>
+            </div>
+            {{ if .Error }}
+            <div class="alert alert-error">{{ .Error }}</div>
+            {{ end }}
+            <div class="card">
+                <form method="POST" action="{{ if .Athlete }}/athletes/{{ .Athlete.ID }}{{ else }}/athletes{{ end }}">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="name">姓名</label>
+                            <input type="text" id="name" name="name" required value="{{ if .Athlete }}{{ .Athlete.Name }}{{ end }}" placeholder="请输入姓名">
+                        </div>
+                        <div class="form-group">
+                            <label for="gender">性别</label>
+                            <select id="gender" name="gender" required>
+                                <option value="男" {{ if .Athlete }}{{ if eq .Athlete.Gender "男" }}selected{{ end }}{{ end }}>男</option>
+                                <option value="女" {{ if .Athlete }}{{ if eq .Athlete.Gender "女" }}selected{{ end }}{{ end }}>女</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="age">年龄</label>
+                            <input type="number" id="age" name="age" min="1" max="100" value="{{ if .Athlete }}{{ .Athlete.Age }}{{ end }}" placeholder="请输入年龄">
+                        </div>
+                        <div class="form-group">
+                            <label for="team">代表队</label>
+                            <input type="text" id="team" name="team" value="{{ if .Athlete }}{{ .Athlete.Team }}{{ end }}" placeholder="请输入代表队名称">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="event">参赛项目</label>
+                            <select id="event" name="event" required>
+                                <option value="">请选择项目</option>
+                                <option value="100米跑" {{ if .Athlete }}{{ if eq .Athlete.Event "100米跑" }}selected{{ end }}{{ end }}>100米跑</option>
+                                <option value="200米跑" {{ if .Athlete }}{{ if eq .Athlete.Event "200米跑" }}selected{{ end }}{{ end }}>200米跑</option>
+                                <option value="400米跑" {{ if .Athlete }}{{ if eq .Athlete.Event "400米跑" }}selected{{ end }}{{ end }}>400米跑</option>
+                                <option value="800米跑" {{ if .Athlete }}{{ if eq .Athlete.Event "800米跑" }}selected{{ end }}{{ end }}>800米跑</option>
+                                <option value="1500米跑" {{ if .Athlete }}{{ if eq .Athlete.Event "1500米跑" }}selected{{ end }}{{ end }}>1500米跑</option>
+                                <option value="跳远" {{ if .Athlete }}{{ if eq .Athlete.Event "跳远" }}selected{{ end }}{{ end }}>跳远</option>
+                                <option value="跳高" {{ if .Athlete }}{{ if eq .Athlete.Event "跳高" }}selected{{ end }}{{ end }}>跳高</option>
+                                <option value="铅球" {{ if .Athlete }}{{ if eq .Athlete.Event "铅球" }}selected{{ end }}{{ end }}>铅球</option>
+                                <option value="标枪" {{ if .Athlete }}{{ if eq .Athlete.Event "标枪" }}selected{{ end }}{{ end }}>标枪</option>
+                                <option value="铁饼" {{ if .Athlete }}{{ if eq .Athlete.Event "铁饼" }}selected{{ end }}{{ end }}>铁饼</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">联系电话</label>
+                            <input type="text" id="phone" name="phone" value="{{ if .Athlete }}{{ .Athlete.Phone }}{{ end }}" placeholder="请输入联系电话">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="id_number">身份证号</label>
+                        <input type="text" id="id_number" name="id_number" value="{{ if .Athlete }}{{ .Athlete.IDNumber }}{{ end }}" placeholder="请输入身份证号">
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">{{ if .Athlete }}保存修改{{ else }}提交报名{{ end }}</button>
+                        <a href="/athletes" class="btn btn-outline">取消</a>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
+    {{ template "partials/footer" . }}
+    <script src="/static/js/main.js"></script>
+</body>
+</html>
+{{ end }}

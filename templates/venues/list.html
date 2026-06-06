@@ -1,0 +1,112 @@
+{{ define "venues/list" }}
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>场地管理 - 赛事赛程管理系统</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    {{ template "partials/header" . }}
+    <div class="layout">
+        <aside class="sidebar">
+            <nav class="sidebar-nav">
+                <a href="/" class="nav-item">首页</a>
+                <a href="/dashboard" class="nav-item">系统概览</a>
+                <a href="/athletes" class="nav-item">运动员管理</a>
+                <a href="/groups" class="nav-item">分组编排</a>
+                <a href="/schedules" class="nav-item">赛程排班</a>
+                <a href="/scores" class="nav-item">成绩录入</a>
+                <a href="/awards" class="nav-item">获奖档案</a>
+                <a href="/venues" class="nav-item active">场地管理</a>
+            </nav>
+        </aside>
+        <main class="main-content">
+            <div class="page-header">
+                <h1>场地管理</h1>
+                <div>
+                    <a href="/venues/schedule" class="btn btn-outline">场地调度</a>
+                    <button class="btn btn-primary" onclick="document.getElementById('venue-form').style.display='block'">+ 新增场地</button>
+                </div>
+            </div>
+            <div id="venue-form" class="card" style="display:none;margin-bottom:1rem;">
+                <h3>新增场地</h3>
+                <form method="POST" action="/venues">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="name">场地名称</label>
+                            <input type="text" id="name" name="name" required placeholder="如：主体育场">
+                        </div>
+                        <div class="form-group">
+                            <label for="location">位置</label>
+                            <input type="text" id="location" name="location" placeholder="如：中心区域">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="capacity">容量</label>
+                            <input type="number" id="capacity" name="capacity" min="1" placeholder="如：5000">
+                        </div>
+                        <div class="form-group">
+                            <label for="status">状态</label>
+                            <select id="status" name="status">
+                                <option value="available">可用</option>
+                                <option value="maintenance">维护中</option>
+                                <option value="occupied">占用中</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">创建</button>
+                        <button type="button" class="btn btn-outline" onclick="document.getElementById('venue-form').style.display='none'">取消</button>
+                    </div>
+                </form>
+            </div>
+            <div class="card">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>编号</th>
+                            <th>场地名称</th>
+                            <th>位置</th>
+                            <th>容量</th>
+                            <th>状态</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{ range .Venues }}
+                        <tr>
+                            <td>{{ .ID }}</td>
+                            <td>{{ .Name }}</td>
+                            <td>{{ .Location }}</td>
+                            <td>{{ .Capacity }}</td>
+                            <td>
+                                <span class="status status-{{ .Status }}">
+                                    {{ if eq .Status "available" }}可用{{ end }}
+                                    {{ if eq .Status "maintenance" }}维护中{{ end }}
+                                    {{ if eq .Status "occupied" }}占用中{{ end }}
+                                </span>
+                            </td>
+                            <td class="actions">
+                                <a href="/venues/{{ .ID }}" class="btn btn-sm btn-info">详情</a>
+                                <form method="POST" action="/venues/{{ .ID }}/delete" style="display:inline" onsubmit="return confirm('确认删除？')">
+                                    <button type="submit" class="btn btn-sm btn-danger">删除</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {{ end }}
+                        {{ if not .Venues }}
+                        <tr><td colspan="6" class="empty">暂无场地数据</td></tr>
+                        {{ end }}
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+    {{ template "partials/footer" . }}
+    <script src="/static/js/main.js"></script>
+</body>
+</html>
+{{ end }}

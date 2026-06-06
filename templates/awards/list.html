@@ -1,0 +1,105 @@
+{{ define "awards/list" }}
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>获奖档案 - 赛事赛程管理系统</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    {{ template "partials/header" . }}
+    <div class="layout">
+        <aside class="sidebar">
+            <nav class="sidebar-nav">
+                <a href="/" class="nav-item">首页</a>
+                <a href="/dashboard" class="nav-item">系统概览</a>
+                <a href="/athletes" class="nav-item">运动员管理</a>
+                <a href="/groups" class="nav-item">分组编排</a>
+                <a href="/schedules" class="nav-item">赛程排班</a>
+                <a href="/scores" class="nav-item">成绩录入</a>
+                <a href="/awards" class="nav-item active">获奖档案</a>
+                <a href="/venues" class="nav-item">场地管理</a>
+            </nav>
+        </aside>
+        <main class="main-content">
+            <div class="page-header">
+                <h1>获奖档案</h1>
+                <button class="btn btn-primary" onclick="document.getElementById('award-form').style.display='block'">+ 新增获奖</button>
+            </div>
+            <div id="award-form" class="card" style="display:none;margin-bottom:1rem;">
+                <h3>新增获奖记录</h3>
+                <form method="POST" action="/awards">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="athlete_id">运动员ID</label>
+                            <input type="number" id="athlete_id" name="athlete_id" required placeholder="请输入运动员编号">
+                        </div>
+                        <div class="form-group">
+                            <label for="event">项目</label>
+                            <input type="text" id="event" name="event" required placeholder="如：100米跑">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="medal_type">奖牌类型</label>
+                            <select id="medal_type" name="medal_type" required>
+                                <option value="金牌">🥇 金牌</option>
+                                <option value="银牌">🥈 银牌</option>
+                                <option value="铜牌">🥉 铜牌</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="competition_name">赛事名称</label>
+                            <input type="text" id="competition_name" name="competition_name" placeholder="如：2026年全国田径锦标赛">
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">保存</button>
+                        <button type="button" class="btn btn-outline" onclick="document.getElementById('award-form').style.display='none'">取消</button>
+                    </div>
+                </form>
+            </div>
+            <div class="card">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>编号</th>
+                            <th>运动员</th>
+                            <th>项目</th>
+                            <th>奖牌</th>
+                            <th>赛事名称</th>
+                            <th>时间</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{ range .Awards }}
+                        <tr>
+                            <td>{{ .ID }}</td>
+                            <td>{{ .AthleteName }}</td>
+                            <td>{{ .Event }}</td>
+                            <td><span class="medal medal-{{ .MedalType }}">{{ .MedalType }}</span></td>
+                            <td>{{ .CompetitionName }}</td>
+                            <td>{{ .CreatedAt }}</td>
+                            <td class="actions">
+                                <a href="/awards/{{ .ID }}" class="btn btn-sm btn-info">详情</a>
+                                <form method="POST" action="/awards/{{ .ID }}/delete" style="display:inline" onsubmit="return confirm('确认删除？')">
+                                    <button type="submit" class="btn btn-sm btn-danger">删除</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {{ end }}
+                        {{ if not .Awards }}
+                        <tr><td colspan="7" class="empty">暂无获奖数据</td></tr>
+                        {{ end }}
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+    {{ template "partials/footer" . }}
+    <script src="/static/js/main.js"></script>
+</body>
+</html>
+{{ end }}

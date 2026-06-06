@@ -1,0 +1,81 @@
+{{ define "scores/entry" }}
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>成绩录入 - 赛事赛程管理系统</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    {{ template "partials/header" . }}
+    <div class="layout">
+        <aside class="sidebar">
+            <nav class="sidebar-nav">
+                <a href="/" class="nav-item">首页</a>
+                <a href="/dashboard" class="nav-item">系统概览</a>
+                <a href="/athletes" class="nav-item">运动员管理</a>
+                <a href="/groups" class="nav-item">分组编排</a>
+                <a href="/schedules" class="nav-item">赛程排班</a>
+                <a href="/scores" class="nav-item active">成绩录入</a>
+                <a href="/awards" class="nav-item">获奖档案</a>
+                <a href="/venues" class="nav-item">场地管理</a>
+            </nav>
+        </aside>
+        <main class="main-content">
+            <div class="page-header">
+                <h1>成绩录入</h1>
+                <a href="/scores" class="btn btn-outline">← 返回列表</a>
+            </div>
+            {{ if .Error }}
+            <div class="alert alert-error">{{ .Error }}</div>
+            {{ end }}
+            <div class="card">
+                <form method="POST" action="/scores">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="athlete_id">运动员</label>
+                            <select id="athlete_id" name="athlete_id" required>
+                                <option value="">请选择运动员</option>
+                                {{ range .Athletes }}
+                                <option value="{{ .ID }}">{{ .Name }} ({{ .Team }} - {{ .Event }})</option>
+                                {{ end }}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="schedule_id">赛程</label>
+                            <select id="schedule_id" name="schedule_id" required>
+                                <option value="">请选择赛程</option>
+                                {{ range .Schedules }}
+                                <option value="{{ .ID }}">{{ .GroupName }} @ {{ .VenueName }} ({{ .StartTime }})</option>
+                                {{ end }}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="score">成绩</label>
+                            <input type="text" id="score" name="score" placeholder="如：10.52秒 / 7.85米">
+                        </div>
+                        <div class="form-group">
+                            <label for="rank">名次</label>
+                            <input type="number" id="rank" name="rank" min="1" placeholder="请输入名次">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="remark">备注</label>
+                        <textarea id="remark" name="remark" rows="3" placeholder="备注信息"></textarea>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">录入成绩</button>
+                        <a href="/scores" class="btn btn-outline">取消</a>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
+    {{ template "partials/footer" . }}
+    <script src="/static/js/main.js"></script>
+</body>
+</html>
+{{ end }}

@@ -1,0 +1,108 @@
+{{ define "groups/list" }}
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>分组编排 - 赛事赛程管理系统</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    {{ template "partials/header" . }}
+    <div class="layout">
+        <aside class="sidebar">
+            <nav class="sidebar-nav">
+                <a href="/" class="nav-item">首页</a>
+                <a href="/dashboard" class="nav-item">系统概览</a>
+                <a href="/athletes" class="nav-item">运动员管理</a>
+                <a href="/groups" class="nav-item active">分组编排</a>
+                <a href="/schedules" class="nav-item">赛程排班</a>
+                <a href="/scores" class="nav-item">成绩录入</a>
+                <a href="/awards" class="nav-item">获奖档案</a>
+                <a href="/venues" class="nav-item">场地管理</a>
+            </nav>
+        </aside>
+        <main class="main-content">
+            <div class="page-header">
+                <h1>分组编排</h1>
+                <button class="btn btn-primary" onclick="document.getElementById('create-form').style.display='block'">+ 创建分组</button>
+            </div>
+            <div id="create-form" class="card" style="display:none;margin-bottom:1rem;">
+                <h3>创建新分组</h3>
+                <form method="POST" action="/groups">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="name">分组名称</label>
+                            <input type="text" id="name" name="name" required placeholder="如：100米跑预赛A组">
+                        </div>
+                        <div class="form-group">
+                            <label for="event">比赛项目</label>
+                            <select id="event" name="event" required>
+                                <option value="">请选择项目</option>
+                                <option value="100米跑">100米跑</option>
+                                <option value="200米跑">200米跑</option>
+                                <option value="400米跑">400米跑</option>
+                                <option value="800米跑">800米跑</option>
+                                <option value="1500米跑">1500米跑</option>
+                                <option value="跳远">跳远</option>
+                                <option value="跳高">跳高</option>
+                                <option value="铅球">铅球</option>
+                                <option value="标枪">标枪</option>
+                                <option value="铁饼">铁饼</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">创建</button>
+                        <button type="button" class="btn btn-outline" onclick="document.getElementById('create-form').style.display='none'">取消</button>
+                    </div>
+                </form>
+            </div>
+            <div class="card">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>编号</th>
+                            <th>分组名称</th>
+                            <th>比赛项目</th>
+                            <th>状态</th>
+                            <th>运动员数</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{ range .Groups }}
+                        <tr>
+                            <td>{{ .ID }}</td>
+                            <td>{{ .Name }}</td>
+                            <td>{{ .Event }}</td>
+                            <td>
+                                <span class="status status-{{ .Status }}">
+                                    {{ if eq .Status "pending" }}待编排{{ end }}
+                                    {{ if eq .Status "arranged" }}已编排{{ end }}
+                                    {{ if eq .Status "completed" }}已完成{{ end }}
+                                </span>
+                            </td>
+                            <td>{{ len .Athletes }}</td>
+                            <td class="actions">
+                                <a href="/groups/{{ .ID }}" class="btn btn-sm btn-info">详情</a>
+                                <a href="/groups/{{ .ID }}/arrange" class="btn btn-sm btn-warning">编排</a>
+                                <form method="POST" action="/groups/{{ .ID }}/delete" style="display:inline" onsubmit="return confirm('确认删除？')">
+                                    <button type="submit" class="btn btn-sm btn-danger">删除</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {{ end }}
+                        {{ if not .Groups }}
+                        <tr><td colspan="6" class="empty">暂无分组数据</td></tr>
+                        {{ end }}
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+    {{ template "partials/footer" . }}
+    <script src="/static/js/main.js"></script>
+</body>
+</html>
+{{ end }}

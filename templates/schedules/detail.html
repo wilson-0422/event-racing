@@ -1,0 +1,108 @@
+{{ define "schedules/detail" }}
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>赛程详情 - 赛事赛程管理系统</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    {{ template "partials/header" . }}
+    <div class="layout">
+        <aside class="sidebar">
+            <nav class="sidebar-nav">
+                <a href="/" class="nav-item">首页</a>
+                <a href="/dashboard" class="nav-item">系统概览</a>
+                <a href="/athletes" class="nav-item">运动员管理</a>
+                <a href="/groups" class="nav-item">分组编排</a>
+                <a href="/schedules" class="nav-item active">赛程排班</a>
+                <a href="/scores" class="nav-item">成绩录入</a>
+                <a href="/awards" class="nav-item">获奖档案</a>
+                <a href="/venues" class="nav-item">场地管理</a>
+            </nav>
+        </aside>
+        <main class="main-content">
+            <div class="page-header">
+                <h1>赛程详情</h1>
+                <a href="/schedules" class="btn btn-outline">← 返回列表</a>
+            </div>
+            <div class="card">
+                <div class="detail-grid">
+                    <div class="detail-item">
+                        <span class="detail-label">分组</span>
+                        <span class="detail-value">{{ .Schedule.GroupName }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">场地</span>
+                        <span class="detail-value">{{ .Schedule.VenueName }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">开始时间</span>
+                        <span class="detail-value">{{ .Schedule.StartTime }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">结束时间</span>
+                        <span class="detail-value">{{ .Schedule.EndTime }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">状态</span>
+                        <span class="detail-value">
+                            <span class="status status-{{ .Schedule.Status }}">
+                                {{ if eq .Schedule.Status "scheduled" }}已排班{{ end }}
+                                {{ if eq .Schedule.Status "in_progress" }}进行中{{ end }}
+                                {{ if eq .Schedule.Status "completed" }}已完成{{ end }}
+                                {{ if eq .Schedule.Status "cancelled" }}已取消{{ end }}
+                            </span>
+                        </span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">创建时间</span>
+                        <span class="detail-value">{{ .Schedule.CreatedAt }}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="section">
+                <h2>状态变更</h2>
+                <div class="card">
+                    <form method="POST" action="/schedules/{{ .Schedule.ID }}/status" class="form-inline">
+                        <select name="status">
+                            <option value="scheduled" {{ if eq .Schedule.Status "scheduled" }}selected{{ end }}>已排班</option>
+                            <option value="in_progress" {{ if eq .Schedule.Status "in_progress" }}selected{{ end }}>进行中</option>
+                            <option value="completed" {{ if eq .Schedule.Status "completed" }}selected{{ end }}>已完成</option>
+                            <option value="cancelled" {{ if eq .Schedule.Status "cancelled" }}selected{{ end }}>已取消</option>
+                        </select>
+                        <button type="submit" class="btn btn-primary btn-sm">更新状态</button>
+                    </form>
+                </div>
+            </div>
+            <div class="section">
+                <h2>成绩记录</h2>
+                <div class="card">
+                    <table class="table">
+                        <thead>
+                            <tr><th>运动员</th><th>成绩</th><th>名次</th><th>备注</th></tr>
+                        </thead>
+                        <tbody>
+                            {{ range .Scores }}
+                            <tr>
+                                <td>{{ .AthleteName }}</td>
+                                <td>{{ .Score }}</td>
+                                <td>{{ .Rank }}</td>
+                                <td>{{ .Remark }}</td>
+                            </tr>
+                            {{ end }}
+                            {{ if not .Scores }}
+                            <tr><td colspan="4" class="empty">暂无成绩记录</td></tr>
+                            {{ end }}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+    {{ template "partials/footer" . }}
+    <script src="/static/js/main.js"></script>
+</body>
+</html>
+{{ end }}

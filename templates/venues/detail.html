@@ -1,0 +1,124 @@
+{{ define "venues/detail" }}
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>场地详情 - 赛事赛程管理系统</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    {{ template "partials/header" . }}
+    <div class="layout">
+        <aside class="sidebar">
+            <nav class="sidebar-nav">
+                <a href="/" class="nav-item">首页</a>
+                <a href="/dashboard" class="nav-item">系统概览</a>
+                <a href="/athletes" class="nav-item">运动员管理</a>
+                <a href="/groups" class="nav-item">分组编排</a>
+                <a href="/schedules" class="nav-item">赛程排班</a>
+                <a href="/scores" class="nav-item">成绩录入</a>
+                <a href="/awards" class="nav-item">获奖档案</a>
+                <a href="/venues" class="nav-item active">场地管理</a>
+            </nav>
+        </aside>
+        <main class="main-content">
+            <div class="page-header">
+                <h1>场地详情</h1>
+                <a href="/venues" class="btn btn-outline">← 返回列表</a>
+            </div>
+            <div class="card">
+                <div class="detail-grid">
+                    <div class="detail-item">
+                        <span class="detail-label">场地名称</span>
+                        <span class="detail-value">{{ .Venue.Name }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">位置</span>
+                        <span class="detail-value">{{ .Venue.Location }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">容量</span>
+                        <span class="detail-value">{{ .Venue.Capacity }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">状态</span>
+                        <span class="detail-value">
+                            <span class="status status-{{ .Venue.Status }}">
+                                {{ if eq .Venue.Status "available" }}可用{{ end }}
+                                {{ if eq .Venue.Status "maintenance" }}维护中{{ end }}
+                                {{ if eq .Venue.Status "occupied" }}占用中{{ end }}
+                            </span>
+                        </span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">创建时间</span>
+                        <span class="detail-value">{{ .Venue.CreatedAt }}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="section">
+                <h2>编辑场地</h2>
+                <div class="card">
+                    <form method="POST" action="/venues/{{ .Venue.ID }}">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="name">场地名称</label>
+                                <input type="text" id="name" name="name" value="{{ .Venue.Name }}" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="location">位置</label>
+                                <input type="text" id="location" name="location" value="{{ .Venue.Location }}">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="capacity">容量</label>
+                                <input type="number" id="capacity" name="capacity" value="{{ .Venue.Capacity }}" min="1">
+                            </div>
+                            <div class="form-group">
+                                <label for="status">状态</label>
+                                <select id="status" name="status">
+                                    <option value="available" {{ if eq .Venue.Status "available" }}selected{{ end }}>可用</option>
+                                    <option value="maintenance" {{ if eq .Venue.Status "maintenance" }}selected{{ end }}>维护中</option>
+                                    <option value="occupied" {{ if eq .Venue.Status "occupied" }}selected{{ end }}>占用中</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">保存修改</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="section">
+                <h2>该场地的赛程安排</h2>
+                <div class="card">
+                    <table class="table">
+                        <thead>
+                            <tr><th>赛程ID</th><th>分组</th><th>开始时间</th><th>结束时间</th><th>状态</th></tr>
+                        </thead>
+                        <tbody>
+                            {{ range .Schedules }}
+                            <tr>
+                                <td>{{ .ID }}</td>
+                                <td>{{ .GroupName }}</td>
+                                <td>{{ .StartTime }}</td>
+                                <td>{{ .EndTime }}</td>
+                                <td><span class="status status-{{ .Status }}">{{ .Status }}</span></td>
+                            </tr>
+                            {{ end }}
+                            {{ if not .Schedules }}
+                            <tr><td colspan="5" class="empty">暂无赛程安排</td></tr>
+                            {{ end }}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+    {{ template "partials/footer" . }}
+    <script src="/static/js/main.js"></script>
+</body>
+</html>
+{{ end }}

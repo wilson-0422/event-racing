@@ -1,0 +1,74 @@
+{{ define "index" }}
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>首页 - 赛事赛程管理系统</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    {{ template "partials/header" . }}
+    <div class="layout">
+        <aside class="sidebar">
+            <nav class="sidebar-nav">
+                <a href="/" class="nav-item active">首页</a>
+                <a href="/dashboard" class="nav-item">系统概览</a>
+                <a href="/athletes" class="nav-item">运动员管理</a>
+                <a href="/groups" class="nav-item">分组编排</a>
+                <a href="/schedules" class="nav-item">赛程排班</a>
+                <a href="/scores" class="nav-item">成绩录入</a>
+                <a href="/awards" class="nav-item">获奖档案</a>
+                <a href="/venues" class="nav-item">场地管理</a>
+            </nav>
+        </aside>
+        <main class="main-content">
+            <div class="hero">
+                <h1>🏆 赛事赛程管理系统</h1>
+                <p>高效管理赛事报名、分组编排、赛程排班、成绩录入与获奖档案</p>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">🏃</div>
+                    <div class="stat-value">{{ .AthleteCount }}</div>
+                    <div class="stat-label">运动员</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">👥</div>
+                    <div class="stat-value">{{ .GroupCount }}</div>
+                    <div class="stat-label">分组</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">📅</div>
+                    <div class="stat-value">{{ .ScheduleCount }}</div>
+                    <div class="stat-label">赛程</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🥇</div>
+                    <div class="stat-value">{{ .AwardCount }}</div>
+                    <div class="stat-label">获奖</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🏟️</div>
+                    <div class="stat-value">{{ .VenueCount }}</div>
+                    <div class="stat-label">场地</div>
+                </div>
+            </div>
+            <div class="quick-actions">
+                <h2>快速操作</h2>
+                <div class="action-grid">
+                    <a href="/athletes/create" class="action-card">📝 运动员报名</a>
+                    <a href="/groups" class="action-card">👥 分组编排</a>
+                    <a href="/schedules/create" class="action-card">📅 创建赛程</a>
+                    <a href="/scores/entry" class="action-card">📊 成绩录入</a>
+                    <a href="/awards" class="action-card">🏅 获奖档案</a>
+                    <a href="/venues/schedule" class="action-card">🏟️ 场地调度</a>
+                </div>
+            </div>
+        </main>
+    </div>
+    {{ template "partials/footer" . }}
+    <script src="/static/js/main.js"></script>
+</body>
+</html>
+{{ end }}

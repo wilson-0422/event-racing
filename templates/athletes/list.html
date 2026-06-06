@@ -1,0 +1,75 @@
+{{ define "athletes/list" }}
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>运动员管理 - 赛事赛程管理系统</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    {{ template "partials/header" . }}
+    <div class="layout">
+        <aside class="sidebar">
+            <nav class="sidebar-nav">
+                <a href="/" class="nav-item">首页</a>
+                <a href="/dashboard" class="nav-item">系统概览</a>
+                <a href="/athletes" class="nav-item active">运动员管理</a>
+                <a href="/groups" class="nav-item">分组编排</a>
+                <a href="/schedules" class="nav-item">赛程排班</a>
+                <a href="/scores" class="nav-item">成绩录入</a>
+                <a href="/awards" class="nav-item">获奖档案</a>
+                <a href="/venues" class="nav-item">场地管理</a>
+            </nav>
+        </aside>
+        <main class="main-content">
+            <div class="page-header">
+                <h1>运动员管理</h1>
+                <a href="/athletes/create" class="btn btn-primary">+ 运动员报名</a>
+            </div>
+            <div class="card">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>编号</th>
+                            <th>姓名</th>
+                            <th>性别</th>
+                            <th>年龄</th>
+                            <th>代表队</th>
+                            <th>参赛项目</th>
+                            <th>联系电话</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{ range .Athletes }}
+                        <tr>
+                            <td>{{ .ID }}</td>
+                            <td>{{ .Name }}</td>
+                            <td>{{ .Gender }}</td>
+                            <td>{{ .Age }}</td>
+                            <td>{{ .Team }}</td>
+                            <td>{{ .Event }}</td>
+                            <td>{{ .Phone }}</td>
+                            <td class="actions">
+                                <a href="/athletes/{{ .ID }}" class="btn btn-sm btn-info">详情</a>
+                                <a href="/athletes/{{ .ID }}/edit" class="btn btn-sm btn-warning">编辑</a>
+                                <form method="POST" action="/athletes/{{ .ID }}/delete" style="display:inline" onsubmit="return confirm('确认删除？')">
+                                    <button type="submit" class="btn btn-sm btn-danger">删除</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {{ end }}
+                        {{ if not .Athletes }}
+                        <tr><td colspan="8" class="empty">暂无运动员数据</td></tr>
+                        {{ end }}
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+    {{ template "partials/footer" . }}
+    <script src="/static/js/main.js"></script>
+</body>
+</html>
+{{ end }}

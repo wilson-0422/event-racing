@@ -1,0 +1,60 @@
+{{ define "awards/detail" }}
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>获奖详情 - 赛事赛程管理系统</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    {{ template "partials/header" . }}
+    <div class="layout">
+        <aside class="sidebar">
+            <nav class="sidebar-nav">
+                <a href="/" class="nav-item">首页</a>
+                <a href="/dashboard" class="nav-item">系统概览</a>
+                <a href="/athletes" class="nav-item">运动员管理</a>
+                <a href="/groups" class="nav-item">分组编排</a>
+                <a href="/schedules" class="nav-item">赛程排班</a>
+                <a href="/scores" class="nav-item">成绩录入</a>
+                <a href="/awards" class="nav-item active">获奖档案</a>
+                <a href="/venues" class="nav-item">场地管理</a>
+            </nav>
+        </aside>
+        <main class="main-content">
+            <div class="page-header">
+                <h1>获奖详情</h1>
+                <a href="/awards" class="btn btn-outline">← 返回列表</a>
+            </div>
+            <div class="card">
+                <div class="detail-grid">
+                    <div class="detail-item">
+                        <span class="detail-label">运动员</span>
+                        <span class="detail-value">{{ .Award.AthleteName }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">项目</span>
+                        <span class="detail-value">{{ .Award.Event }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">奖牌</span>
+                        <span class="detail-value"><span class="medal medal-{{ .Award.MedalType }}">{{ .Award.MedalType }}</span></span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">赛事名称</span>
+                        <span class="detail-value">{{ .Award.CompetitionName }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">记录时间</span>
+                        <span class="detail-value">{{ .Award.CreatedAt }}</span>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    {{ template "partials/footer" . }}
+    <script src="/static/js/main.js"></script>
+</body>
+</html>
+{{ end }}
